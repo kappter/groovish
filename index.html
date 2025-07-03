@@ -1,57 +1,57 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <base target="_top">
-    <style>
-      body { font-family: Arial; padding: 20px; }
-      input, button { margin-top: 10px; display: block; }
-    </style>
-  </head>
-  <body>
-    <h2>🎶 Music Collaboration Prototype</h2>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🎶 Session Collaboration</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; background: #f9f9f9; }
+    h1, h2 { color: #333; }
+    .section { margin-bottom: 30px; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+    label { display: block; margin: 10px 0 5px; font-weight: bold; }
+    input[type="file"], input[type="text"], textarea { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
+    button { margin-top: 10px; padding: 10px 20px; background: #2b74e4; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #1748b3; }
+    audio { width: 100%; margin-top: 10px; }
+    .comment-box { margin-top: 15px; padding: 10px; background: #eef; border-radius: 5px; }
+  </style>
+</head>
+<body>
 
-    <label>Create or Join Session:</label>
-    <input type="text" id="sessionName" placeholder="Session ID or Name">
-    <button onclick="createSession()">Create/Join</button>
+  <h1>🎧 Music Session: <em>Echo Drift</em></h1>
 
-    <div id="uploadUI" style="display:none;">
-      <label>Upload Your Track:</label>
-      <input type="file" id="fileUpload">
-      <button onclick="uploadFile()">Upload</button>
+  <div class="section">
+    <h2>🎼 Session Parameters</h2>
+    <p><strong>Key:</strong> E Minor</p>
+    <p><strong>Mode:</strong> Dorian</p>
+    <p><strong>Mood:</strong> Mysterious / Dreamlike</p>
+    <p><strong>Tempo:</strong> 92 BPM</p>
+  </div>
+
+  <div class="section">
+    <h2>🔊 Base Track</h2>
+    <audio controls src="https://example.com/audio/basetrack.mp3"></audio>
+    <p>Listen and interpret within the constraints above.</p>
+  </div>
+
+  <div class="section">
+    <h2>🎸 Upload Your Instrument Track</h2>
+    <label for="fileUpload">Select audio file (.mp3 or .wav)</label>
+    <input type="file" id="fileUpload">
+    <button onclick="alert('Upload triggered')">Upload Track</button>
+  </div>
+
+  <div class="section">
+    <h2>🗣️ Session Comments</h2>
+    <div class="comment-box">
+      <strong>Alicia (keys):</strong> Thinking of switching to Am7 over the 3rd bar—thoughts?
     </div>
+    <div class="comment-box">
+      <strong>Jorge (guitar):</strong> Love that, I’ll harmonize around Am9/D.
+    </div>
+    <label for="newComment">Add Comment:</label>
+    <textarea id="newComment" rows="3" placeholder="Suggest a chord idea, structure change, or vibe enhancement..."></textarea>
+    <button onclick="alert('Comment submitted')">Post Comment</button>
+  </div>
 
-    <p id="result"></p>
-
-    <script>
-      let currentSession = "";
-
-      function createSession() {
-        const name = document.getElementById("sessionName").value;
-        google.script.run.withSuccessHandler(res => {
-          currentSession = name;
-          document.getElementById("result").innerHTML = 
-            `Session ${res.status}: <a href="${res.url}" target="_blank">Open Folder</a>`;
-          document.getElementById("uploadUI").style.display = "block";
-        }).createSession(name);
-      }
-
-      function uploadFile() {
-        const fileInput = document.getElementById("fileUpload");
-        const file = fileInput.files[0];
-        const reader = new FileReader();
-        reader.onloadend = function () {
-          const content = reader.result.split(",")[1];
-          const data = {
-            name: file.name,
-            mimeType: file.type,
-            data: content
-          };
-          google.script.run.withSuccessHandler(() => {
-            document.getElementById("result").innerHTML += `<br>✅ Uploaded ${file.name}`;
-          }).uploadFile(currentSession, data);
-        };
-        reader.readAsDataURL(file);
-      }
-    </script>
-  </body>
+</body>
 </html>
